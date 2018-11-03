@@ -262,14 +262,14 @@ const usePlayerState = () => {
       findPill(pill);
     }
 
+    if (currentKeys.up && !isJumping) {
+      dispatch(jump());
+    }
+
     if (currentKeys.left) {
       dispatch(moveLeft());
     } else if (currentKeys.right) {
       dispatch(moveRight());
-    }
-
-    if (currentKeys.up && !isJumping) {
-      dispatch(jump());
     }
 
     dispatch(fall());
