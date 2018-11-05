@@ -2,7 +2,6 @@ import React, { useState, useReducer, useEffect } from 'react';
 import { Observable, animationFrameScheduler, interval } from 'rxjs';
 import xs from 'xstream';
 
-
 const useKeyboard = () => {
 
   type Keys = 'left' | 'up' | 'down' | 'right';
