@@ -1,10 +1,10 @@
 import React from 'react';
-import { createStore, compose, applyMiddleware } from 'redux';
+import { createStore, compose, applyMiddleware, AnyAction } from 'redux';
 
 import { createEpicMiddleware } from 'redux-observable';
 import { Provider } from 'react-redux';
 import Game from './Game';
-import { reducer } from 'store/';
+import { reducer, State } from 'store/';
 import rootEpic from 'store/epics';
 
 declare global {
@@ -15,7 +15,7 @@ declare global {
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-const epicMiddleWare = createEpicMiddleware();
+const epicMiddleWare = createEpicMiddleware<AnyAction, AnyAction, State>();
 
 const store = createStore(
   reducer, composeEnhancers(
