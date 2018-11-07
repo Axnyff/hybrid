@@ -22,7 +22,7 @@ const styles = {
 const Level : React.SFC<Props> = ({ dispatchInitEntities, initialEntities, entities }) => {
   useHandleEntitiesCreation({ dispatchInitEntities, entities: initialEntities });
   return (
-    <React.Fragment>
+    <div>
       {entities.map(({ x, y, width, height, id, type }) => {
         const style = {
           ...styles[type],
@@ -35,7 +35,7 @@ const Level : React.SFC<Props> = ({ dispatchInitEntities, initialEntities, entit
           />
         );
       })}
-    </React.Fragment>
+    </div>
   );
 };
 

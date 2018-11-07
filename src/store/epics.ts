@@ -8,17 +8,11 @@ import { WindowState } from 'store/window';
 import { filter, mapTo, flatMap, map, delay, withLatestFrom } from 'rxjs/operators';
 import {interval, from} from 'rxjs';
 
+
+
 const updateEpic = (action$: Observable<AnyAction>, state$: StateObservable<State>) =>
   action$.pipe(
     ofType('UPDATE'),
-    flatMap(() => from([
-      { type: 'UPDATE_SPEED' },
-      { type: 'UPDATE_POSITION' }
-    ])));
-
-const updateSpeedEpic = (action$: Observable<AnyAction>, state$: StateObservable<State>) =>
-  action$.pipe(
-    ofType('UPDATE_SPEED'),
     flatMap(() => {
       const state = state$.value;
       const { keyboard, entities } = state
@@ -40,17 +34,20 @@ const updateSpeedEpic = (action$: Observable<AnyAction>, state$: StateObservable
             speedX = Math.sign(speedX) * Math.max(0, Math.abs(speedX) - 2);
           }
 
-          console.log(performance.now() - lastJump);
-          if (keyboard.up && entity.jumpCount < 2 && performance.now() - lastJump >= 500) {
+          if (keyboard.up && entity.jumpCount < 2 && performance.now() - lastJump >= 200) {
             lastJump = performance.now();
             jumpCount = entity.jumpCount += 1;
             speedY = 25;
+          } else {
+            speedY = Math.max(speedY - 2, -10);
           }
 
           return {
             type: 'UPDATE_ENTITY',
             payload: {
-              entity: {...entity, speedX, speedY, lastJump },
+              entity: updateEntity(
+                {...entity, speedX, speedY, lastJump },
+                state),
             }
           };
         } else {
@@ -70,85 +67,63 @@ type Coords = {
 }
 
 function overlap(a1: number, a2: number, b1: number, b2: number) {
-  return a1 <= b2 && b1 <= a2;
+  return a1 < b2 && b1 < a2;
 }
 
-function handleCollision(moving: Entity, others: Entity[], window: WindowState) {
-  let result = {...moving, x: moving.x + moving.speedX, y: moving.y + moving.speedY, speedY: moving.speedY - 1};
-  for (const other of others) {
-
-    const y = result.y + result.speedY;
-
-    const otherTop = other.y + other.height;
-    const otherRight = other.x + other.width;
-
-    if (
-      overlap(result.x, result.x + result.width, other.x, other.x + other.width) &&
-      overlap(result.y, result.y + result.height, other.y, otherTop)) {
-      if (
-        result.y <= otherTop && moving.y >= otherTop
-      ) {
-        result = {...result, y: otherTop, speedY: 0, jumpCount: 0};
-      }
-      else if (moving.y + result.height <= other.y && result.y + result.height >= other.y) {
-        result = {...result, y: other.y - result.height, speedY: -5 };
-      } else if (moving.x + result.width <= other.x && result.x + result.width >= other.x) {
-        result = {...result, x: other.x - result.width, speedX: 0 };
-      } else {
-        result = {...result, x: otherRight, speedX: 0 };
-      }
-    }
-  }
-
-  let { x, y, speedX, speedY, jumpCount } = result;
-  if (x <= 0) {
-    x = 0;
-    speedX = 0;
-  } else if (x + result.width >= window.width) {
-    x = window.width - result.width;
-    speedX = 0;
-  }
-  if (y <= 0) {
-    y = 0;
-    speedY = 0
-    jumpCount = 0;
-  } else if (y + result.height >= window.height) {
-    y = window.height - result.height;
-    speedY = -5;
-  }
-  return {...result, x, y, speedX, speedY, jumpCount };
-};
-
-const updatePositionEpic = (action$: Observable<AnyAction>, state$: StateObservable<State>) =>
-  action$.pipe(
-    ofType('UPDATE_POSITION'),
-    delay(0),
-    withLatestFrom(state$),
-    flatMap(([, state]) => {
-      const { entities, window } = state
-
-      return from(entities.map(entity => {
-        if (entity.type === 'player') {
-          const others = entities.filter(({ id }) => id !== entity.id);
-
-          return {
-            type: 'UPDATE_ENTITY',
-            payload: {
-              entity: handleCollision(entity, others, window)
-            }
-          };
-        } else {
-          return {
-            type: 'NONE',
-          };
-        }
-      }));
-    }),
-    filter(({ type }) => type !== 'NONE')
+function hasOverlap(entityA: Entity, entityB: Entity): boolean {
+  return (
+    entityA.x < entityB.x + entityB.width &&
+    entityA.x + entityA.width >= entityB.x &&
+    entityA.y + entityA.height >= entityB.y &&
+    entityA.y <= entityB.y + entityB.height
   );
+}
+
+
+function handleCollision(entity: Entity, otherEntity: Entity, originalEntity: Entity): Entity {
+  const { x, y, height, width } = originalEntity;
+  const newY = entity.y
+  const newX = entity.x
+
+  const otherTop = otherEntity.y + otherEntity.height;
+  const otherRight = otherEntity.x + otherEntity.width;
+
+  if ( hasOverlap(entity, otherEntity)) {
+    // y overlap
+    if (y >= otherTop &&  newY <= otherTop) {
+      return {...entity, y: otherTop, speedY: 0, jumpCount: 0};
+    }
+    if (y + height <= otherEntity.y && entity.y + height >= otherEntity.y) {
+      return {...entity, y: otherEntity.y - height, speedY: -5 };
+    }
+    // x overlap
+    if (originalEntity.x + width <= otherEntity.x && entity.x + originalEntity.width >= otherEntity.x) {
+      return {...entity, x: otherEntity.x - entity.width, speedX: 0 };
+    }
+
+    // only overlap left
+    return {...entity, x: otherRight, speedX: 0 };
+  }
+  return entity;
+}
+
+
+function updateEntity(entity: Entity, { window, entities }: State) {
+  const moved = {
+    ...entity, x: entity.x + entity.speedX, y: entity.y + entity.speedY,
+  };
+
+  const otherEntities = entities.filter(other => other.id !== entity.id).concat([
+    { x: 0, y: -50, height: 50, width: window.width, type: 'platform', id: 'floor', speedX: 0, speedY: 0, jumpCount: 0 },
+    { x: 0, y: window.height, height: 50, width: window.width, type: 'platform', id: 'ceiling', speedX: 0, speedY: 0, jumpCount: 0 },
+    { x: -50, y: 0, height: window.height, width: 50, type: 'platform', id: 'leftwall', speedX: 0, speedY: 0, jumpCount: 0 },
+    { x: window.width, y: 0, height: window.height, width: 50, type: 'platform', id: 'leftwall', speedX: 0, speedY: 0, jumpCount: 0 },
+  ]);
+
+  return otherEntities
+    .reduce((result, other) => handleCollision(result, other, entity), moved);
+};
 
 export default combineEpics(
   updateEpic,
-  updateSpeedEpic,
-  updatePositionEpic
 );
