@@ -8,14 +8,12 @@ import { WindowState } from 'store/window';
 import { filter, mapTo, flatMap, map, delay, withLatestFrom } from 'rxjs/operators';
 import {interval, from} from 'rxjs';
 
-
-
 const updateEpic = (action$: Observable<AnyAction>, state$: StateObservable<State>) =>
   action$.pipe(
     ofType('UPDATE'),
     flatMap(() => {
       const state = state$.value;
-      const { keyboard, entities } = state
+      const { keyboard, entities, player } = state
 
       return from(entities.map(entity => {
         if (entity.type === 'player') {
@@ -25,21 +23,21 @@ const updateEpic = (action$: Observable<AnyAction>, state$: StateObservable<Stat
           let lastJump = entity.lastJump || 0;
 
           if (keyboard.left) {
-            speedX = Math.max(speedX - 5, - 10);
+            speedX = Math.max(speedX - player.accelerationX, - 10);
           }
           if (keyboard.right) {
-            speedX = Math.min(speedX + 5, 10);
+            speedX = Math.min(speedX + player.accelerationX, 10);
           }
           if (!keyboard.left && !keyboard.right) {
-            speedX = Math.sign(speedX) * Math.max(0, Math.abs(speedX) - 2);
+            speedX = Math.sign(speedX) * Math.max(0, Math.abs(speedX) - player.slowDownX);
           }
 
-          if (keyboard.up && entity.jumpCount < 2 && performance.now() - lastJump >= 200) {
+          if (keyboard.up && entity.jumpCount < player.maxJump && performance.now() - lastJump >= 200) {
             lastJump = performance.now();
             jumpCount = entity.jumpCount += 1;
             speedY = 25;
           } else {
-            speedY = Math.max(speedY - 2, -10);
+            speedY = Math.max(speedY - player.gravity, -10);
           }
 
           return {
@@ -88,13 +86,13 @@ function handleCollision(entity: Entity, otherEntity: Entity, originalEntity: En
   const otherTop = otherEntity.y + otherEntity.height;
   const otherRight = otherEntity.x + otherEntity.width;
 
-  if ( hasOverlap(entity, otherEntity)) {
+  if (hasOverlap(entity, otherEntity)) {
     // y overlap
     if (y >= otherTop &&  newY <= otherTop) {
       return {...entity, y: otherTop, speedY: 0, jumpCount: 0};
     }
     if (y + height <= otherEntity.y && entity.y + height >= otherEntity.y) {
-      return {...entity, y: otherEntity.y - height, speedY: -5 };
+      return {...entity, y: otherEntity.y - height, speedY: 0 };
     }
     // x overlap
     if (originalEntity.x + width <= otherEntity.x && entity.x + originalEntity.width >= otherEntity.x) {

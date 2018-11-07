@@ -5,7 +5,7 @@ import { createEpicMiddleware } from 'redux-observable';
 import { Provider } from 'react-redux';
 import Game from './Game';
 import { reducer, State } from 'store/';
-import rootEpic from 'store/epics';
+import rootEpic from 'store/epics/';
 
 declare global {
   interface Window {

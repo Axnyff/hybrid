@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { State, update } from 'store';
-import { EntitiesState } from 'store/entities';
+import { Entity, EntitiesState } from 'store/entities';
 import { KeyboardState, keyboardUp, keyboardDown, Direction } from 'store/keyboard';
 import { setWindowSize } from 'store/window';
 import { GameState } from 'store/game';
@@ -19,6 +19,12 @@ interface Props {
   dispatchSetWindowSize: (payload: { width: number, height: number }) => void;
 };
 
+const createPlateform = ({ id, x, y, width, height }: { id: string, x: number, y: number, width: number, height: number}) : Entity => ({
+  x, y, id, width, height,
+  speedX: 0, speedY: 0, jumpCount: 0,
+  type: 'platform',
+});
+
 const initialEntities: EntitiesState = [
   {
     id: 'player',
@@ -30,29 +36,19 @@ const initialEntities: EntitiesState = [
     height: 50,
     jumpCount: 0,
     type: 'player',
-  },
-  {
+  }, createPlateform({
     id: 'platform',
     x: 200,
     y: 100,
-    speedX: 0,
-    speedY: 0,
     width: 30,
     height: 30,
-    jumpCount: 0,
-    type: 'platform',
-  },
-  {
+  }), createPlateform({
     id: 'platform2',
     x: 400,
     y: 50,
-    speedX: 0,
-    speedY: 0,
     width: 300,
     height: 300,
-    jumpCount: 0,
-    type: 'platform',
-  },
+  }),
 ];
 
 const Game: React.SFC<Props> = (props) => {

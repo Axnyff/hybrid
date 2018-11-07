@@ -3,6 +3,7 @@ import keyboardReducer, { KeyboardState } from './keyboard';
 import windowReducer, { WindowState } from './window';
 import entitiesReducer, { EntitiesState } from './entities';
 import gameReducer, { GameState } from './game';
+import playerReducer, { PlayerState} from './player';
 
 export const updateAction = ({
   type: 'UPDATE',
@@ -15,6 +16,7 @@ export type State = {
   window: WindowState;
   entities: EntitiesState;
   game: GameState;
+  player: PlayerState;
 };
 
 export const reducer = combineReducers({
@@ -22,4 +24,5 @@ export const reducer = combineReducers({
   window: windowReducer,
   entities: entitiesReducer,
   game: gameReducer,
+  player: playerReducer,
 });

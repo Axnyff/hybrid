@@ -1,15 +1,26 @@
-export type Entity = {
+type BaseEntity = {
   id: string;
   x: number;
-  speedX: number;
   y: number;
+  speedX: number;
   speedY: number;
   width: number;
   height: number;
   jumpCount: number;
-  lastJump?: number;
-  type: 'player' | 'platform'
 };
+
+type PlayerEntity = {
+  type: 'player';
+  lastJump?: number;
+};
+
+type PlatformEntity = {
+  type: 'platform';
+};
+
+type ExtraEntity = PlayerEntity | PlatformEntity;
+
+export type Entity = BaseEntity & ExtraEntity;
 
 export type EntitiesState = Entity[];
 
