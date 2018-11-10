@@ -1,16 +1,16 @@
 import { useEffect } from 'react';
 
 type Input = {
-  dispatchTogglePause: () => void;
+  toggler: () => void;
 };
 
-export default ({ dispatchTogglePause }: Input) => {
+export default ({ toggler }: Input) => {
   useEffect(() => {
     let blocked = false;
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.keyCode === 32 && !blocked) {
         blocked = true;
-        dispatchTogglePause();
+        toggler();
       }
     };
 
@@ -28,5 +28,5 @@ export default ({ dispatchTogglePause }: Input) => {
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('keyup', handleKeyUp);
     };
-  }, []);
+  }, [toggler]);
 };

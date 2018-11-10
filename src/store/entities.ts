@@ -18,7 +18,15 @@ type PlatformEntity = {
   type: 'platform';
 };
 
-type ExtraEntity = PlayerEntity | PlatformEntity;
+type DoorEntity = {
+  type: 'door',
+}
+
+type TrapEntity = {
+  type: 'trap',
+}
+
+type ExtraEntity = PlayerEntity | PlatformEntity | DoorEntity | TrapEntity;
 
 export type Entity = BaseEntity & ExtraEntity;
 

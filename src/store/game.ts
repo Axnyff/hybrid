@@ -1,12 +1,17 @@
-type SetGameAction = {
-  type: 'SET_GAME',
-  payload: {
-    level: number,
-    paused: boolean;
-  };
+export type WinGameAction = {
+  type: 'WIN_GAME',
 };
 
-export const setGame = (payload: GameState) => ({
+export type LoseGameAction = {
+  type: 'LOSE_GAME',
+};
+
+export type SetGameAction = {
+  type: 'SET_GAME',
+  payload: Partial<GameState>;
+};
+
+export const setGame = (payload: Partial<GameState>) => ({
   payload, type: 'SET_GAME',
 });
 
@@ -21,16 +26,28 @@ export const togglePause = () => ({
 export type GameState = {
   level: number,
   paused: boolean,
+  lost: boolean,
+  won: boolean,
 };
 
 const initialState = {
   level: 1,
-  paused: true,
+  paused: false,
+  lost: false,
+  won: false,
 };
 
-export default (state: GameState = initialState, action: SetGameAction | TogglePauseAction) => {
+type Action = SetGameAction | TogglePauseAction | WinGameAction | LoseGameAction;
+
+export default (state: GameState = initialState, action: Action) => {
   if (action.type === 'SET_GAME') {
-    return action.payload;
+    return {...state, ...action.payload};
+  }
+  if (action.type === 'WIN_GAME') {
+    return {...state, won: true};
+  }
+  if (action.type === 'LOSE_GAME') {
+    return {...state, lost: true};
   }
   if (action.type === 'TOGGLE_PAUSE') {
     return {
