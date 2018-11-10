@@ -4,11 +4,13 @@ import { State, update } from 'store';
 import { Entity, EntitiesState } from 'store/entities';
 import { KeyboardState, keyboardUp, keyboardDown, Direction } from 'store/keyboard';
 import { setWindowSize } from 'store/window';
-import { GameState } from 'store/game';
+import { togglePause, GameState } from 'store/game';
 import useHandleKeyBoard from 'effects/useHandleKeyboard';
 import useHandleWindowSize from 'effects/useHandleWindowSize';
 import useHandleGameLoop from 'effects/useHandleGameLoop';
+import useHandlePause from 'effects/useHandlePause';
 import Level from 'container/Level';
+import PauseOverlay from 'components/PauseOverlay';
 
 interface Props {
   game: GameState;
@@ -17,6 +19,7 @@ interface Props {
   dispatchKeyboardUp: (dir: Direction) => void;
   dispatchKeyboardDown: (dir: Direction) => void;
   dispatchSetWindowSize: (payload: { width: number, height: number }) => void;
+  dispatchTogglePause: () => void;
 };
 
 const createPlateform = ({ id, x, y, width, height }: { id: string, x: number, y: number, width: number, height: number}) : Entity => ({
@@ -57,15 +60,18 @@ const Game: React.SFC<Props> = (props) => {
     dispatchKeyboardUp,
     dispatchKeyboardDown,
     dispatchUpdate,
+    dispatchTogglePause,
     game,
   } = props;
 
   useHandleKeyBoard({ dispatchKeyboardUp, dispatchKeyboardDown });
   useHandleWindowSize(dispatchSetWindowSize);
   useHandleGameLoop({ dispatchUpdate , game })
+  useHandlePause({ dispatchTogglePause });
 
   return (
     <div>
+      {game.paused ? <PauseOverlay /> : null }
       <Level initialEntities={initialEntities} />
     </div>
   );
@@ -83,6 +89,7 @@ const mapDispatchToProps = {
   dispatchKeyboardUp: keyboardUp,
   dispatchKeyboardDown: keyboardDown,
   dispatchSetWindowSize: setWindowSize,
+  dispatchTogglePause: togglePause,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Game);

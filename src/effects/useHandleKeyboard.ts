@@ -34,7 +34,7 @@ export default ({ dispatchKeyboardUp, dispatchKeyboardDown }: Input) => {
 
     return () => {
       window.removeEventListener('keyup', handleKeyboardUp);
-      window.removeEventListener('keydown', handleKeyboardUp);
+      window.removeEventListener('keydown', handleKeyboardDown);
     };
   }, []);
 };

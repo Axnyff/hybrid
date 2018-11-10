@@ -22,6 +22,7 @@ const updateEpic = (action$: Observable<AnyAction>, state$: StateObservable<Stat
           let jumpCount = entity.jumpCount;
           let lastJump = entity.lastJump || 0;
 
+
           if (keyboard.left) {
             speedX = Math.max(speedX - player.accelerationX, - 10);
           }
