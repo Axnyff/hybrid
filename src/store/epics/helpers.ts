@@ -120,10 +120,10 @@ export function handlePlayerSpeed(
   const { keyboard, player } = state;
 
   if (keyboard.left) {
-    speedX = Math.max(speedX - player.accelerationX, -player.maxSpeedX);
+    speedX = Math.max(speedX - player.accelerationLeft, -player.maxSpeedLeft);
   }
   if (keyboard.right) {
-    speedX = Math.min(speedX + player.accelerationX, player.maxSpeedX);
+    speedX = Math.min(speedX + player.accelerationRight, player.maxSpeedRight);
   }
   if (!keyboard.left && !keyboard.right) {
     speedX =

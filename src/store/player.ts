@@ -27,13 +27,13 @@ export const eatPill = (payload: string) => ({
 
 export interface PlayerState {
   gravity: number;
-  accelerationX: number;
+  accelerationLeft: number;
+  accelerationRight: number;
   slowDownX: number;
-  accelerationY: number;
-  maxSpeed: number;
+  maxSpeedLeft: number;
+  maxSpeedRight: number;
   maxJump: number;
   jumpDelay: number;
-  maxSpeedX: number;
   jumpSpeed: number;
   frameRate: number;
   pills: {
@@ -46,10 +46,11 @@ export interface PlayerState {
 
 const initialState = {
   gravity: 2,
-  accelerationX: 5,
-  accelerationY: 5,
+  accelerationLeft: 5,
+  accelerationRight: 5,
   slowDownX: 2,
-  maxSpeed: 10,
+  maxSpeedLeft: 10,
+  maxSpeedRight: 10,
   maxJump: 2,
   jumpDelay: 200,
   maxSpeedX: 10,

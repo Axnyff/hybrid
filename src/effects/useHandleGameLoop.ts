@@ -18,6 +18,6 @@ export default ({ dispatchUpdate, game, frameRate }: Args) => {
       }
       return () => null;
     },
-    [game]
+    [game, frameRate]
   );
 };

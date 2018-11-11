@@ -2,6 +2,7 @@ import LostOverlay from "components/LostOverlay";
 import PauseOverlay from "components/PauseOverlay";
 import WonOverlay from "components/WonOverlay";
 import GameWonOverlay from "components/GameWonOverlay";
+import Hub from "components/Hub";
 import Level from "container/Level";
 import useHandleGameLoop from "effects/useHandleGameLoop";
 import useHandleKeyBoard from "effects/useHandleKeyboard";
@@ -46,7 +47,7 @@ const Game: React.SFC<Props> = props => {
     player
   } = props;
 
-  useHandleMusic(game.paused);
+  useHandleMusic(game.paused, player.frameRate);
   useHandleKeyBoard({ dispatchKeyboardUp, dispatchKeyboardDown });
   useHandleWindowSize(dispatchSetWindowSize);
   useHandleGameLoop({ dispatchUpdate, game, frameRate: player.frameRate });
@@ -60,13 +61,10 @@ const Game: React.SFC<Props> = props => {
 
   return (
     <div>
-      {player.eatenPills.map((id: string) => (
-        <div key={id}>{id}</div>
-      ))}
       {game.paused && !game.lost ? <PauseOverlay /> : null}
       {game.lost ? <LostOverlay /> : null}
       {game.won ? <WonOverlay /> : null}
-      <span>Current level: {game.level}</span>
+      <Hub level={game.level} eatenPills={player.eatenPills} />
       <Level key={game.level} initialEntities={levels[1].entities} />
     </div>
   );

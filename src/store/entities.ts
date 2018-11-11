@@ -17,15 +17,17 @@ export type PlayerEntity = BaseEntity & {
 };
 
 export type PlatformEntity = BaseEntity & {
-  type: "platform";
   updateFn?: (entity: Entity) => Entity;
+  type: "platform";
 };
 
 export type DoorEntity = BaseEntity & {
+  updateFn?: (entity: Entity) => Entity;
   type: "door";
 };
 
 export type TrapEntity = BaseEntity & {
+  updateFn?: (entity: Entity) => Entity;
   type: "trap";
 };
 

@@ -65,7 +65,7 @@ const Level: React.SFC<Props> = ({
           }}
         />
       ))}
-      {entities.map(({ x, y, width, height, id, type }) => {
+      {entities.map(({ x, y, width, height, type }, index) => {
         const style = {
           ...styles[type],
           left: x,
@@ -73,7 +73,7 @@ const Level: React.SFC<Props> = ({
           width,
           height
         };
-        return <div key={id} style={{ ...style, position: "absolute" }} />;
+        return <div key={index} style={{ ...style, position: "absolute" }} />;
       })}
     </div>
   );
