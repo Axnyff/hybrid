@@ -33,7 +33,7 @@ export interface GameState {
 
 const initialState = {
   level: 1,
-  paused: false,
+  paused: true,
   lost: false,
   won: false
 };

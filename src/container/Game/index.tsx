@@ -7,6 +7,7 @@ import useHandleGameLoop from "effects/useHandleGameLoop";
 import useHandleKeyBoard from "effects/useHandleKeyboard";
 import useHandlePause from "effects/useHandlePause";
 import useHandleWindowSize from "effects/useHandleWindowSize";
+import useHandleMusic from "effects/useHandleMusic";
 import React from "react";
 import { connect } from "react-redux";
 import { State, update } from "store";
@@ -42,9 +43,10 @@ const Game: React.SFC<Props> = props => {
     dispatchTogglePause,
     dispatchRestartGame,
     game,
-    player,
+    player
   } = props;
 
+  useHandleMusic(game.paused);
   useHandleKeyBoard({ dispatchKeyboardUp, dispatchKeyboardDown });
   useHandleWindowSize(dispatchSetWindowSize);
   useHandleGameLoop({ dispatchUpdate, game, frameRate: player.frameRate });
@@ -58,6 +60,9 @@ const Game: React.SFC<Props> = props => {
 
   return (
     <div>
+      {player.eatenPills.map((id: string) => (
+        <div key={id}>{id}</div>
+      ))}
       {game.paused && !game.lost ? <PauseOverlay /> : null}
       {game.lost ? <LostOverlay /> : null}
       {game.won ? <WonOverlay /> : null}
@@ -71,7 +76,7 @@ const mapStateToProps = (state: State) => {
   return {
     keyboard: state.keyboard,
     game: state.game,
-    player: state.player,
+    player: state.player
   };
 };
 

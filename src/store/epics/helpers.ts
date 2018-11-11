@@ -177,10 +177,7 @@ function handlePlayerCollision(
     }
 
     // x overlap
-    if (
-      x + width <= otherEntity.x &&
-      entity.x + width >= otherEntity.x
-    ) {
+    if (x + width <= otherEntity.x && entity.x + width >= otherEntity.x) {
       return { ...entity, x: otherEntity.x - entity.width, speedX: 0 };
     }
 
@@ -237,4 +234,21 @@ export function updatePlayerEntity(entity: PlayerEntity, state: State) {
   ];
 
   return funcs.reduce((entity, func) => func(entity, state), entity);
+}
+
+export function detectPill(
+  entity: PlayerEntity,
+  state: State
+): string | undefined {
+  const pill = state.player.pills.find(pill => {
+    return hasOverlap(
+      {
+        ...pill,
+        width: 15,
+        height: 15
+      } as Entity,
+      entity
+    );
+  });
+  return pill && pill.id;
 }

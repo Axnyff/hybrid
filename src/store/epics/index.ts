@@ -1,16 +1,10 @@
 import { AnyAction } from "redux";
 import { combineEpics, ofType, StateObservable } from "redux-observable";
 import { Observable, from } from "rxjs";
-import {
-  delay,
-  filter,
-  flatMap,
-  map,
-  mapTo,
-} from "rxjs/operators";
+import { delay, filter, flatMap, map, mapTo } from "rxjs/operators";
 import { State } from "store";
 import { Entity, PlayerEntity } from "store/entities";
-import { updatePlayerEntity, detectWinOrLost } from "./helpers";
+import { updatePlayerEntity, detectWinOrLost, detectPill } from "./helpers";
 
 const updateGameEpic = (
   action$: Observable<AnyAction>,
@@ -100,6 +94,12 @@ const updatePlayerEpic = (
 
       if (won) {
         return { type: "WIN_GAME" };
+      }
+
+      const foundPill = detectPill(playerEntity, state);
+
+      if (foundPill) {
+        return { type: "EAT_PILL", payload: foundPill };
       }
 
       return {

@@ -2,14 +2,19 @@ import useHandleEntitiesCreation from "effects/useHandleEntitiesCreation";
 import React from "react";
 import { connect } from "react-redux";
 import { State } from "store";
+import { initPills, PlayerState } from "store/player";
 import { EntitiesState, initEntities } from "store/entities";
 import { GameState } from "store/game";
+import { WindowState } from "store/window";
 
 interface Props {
   dispatchInitEntities: (entities: EntitiesState) => void;
   initialEntities: EntitiesState;
   entities: EntitiesState;
   game: GameState;
+  dispatchInitPills: (payload: { x: number; y: number; id: string }[]) => void;
+  window: WindowState;
+  player: PlayerState;
 }
 
 const styles = {
@@ -31,16 +36,35 @@ const styles = {
 const Level: React.SFC<Props> = ({
   game,
   dispatchInitEntities,
+  dispatchInitPills,
   initialEntities,
-  entities
+  entities,
+  window,
+  player
 }) => {
   useHandleEntitiesCreation({
     game,
     dispatchInitEntities,
-    entities: initialEntities
+    entities: initialEntities,
+    dispatchInitPills,
+    window
   });
   return (
     <div>
+      {player.pills.map(({ x, y, id }) => (
+        <div
+          key={id}
+          style={{
+            position: "absolute",
+            left: x,
+            bottom: y,
+            width: "20px",
+            height: "20px",
+            borderRadius: "100%",
+            background: "purple"
+          }}
+        />
+      ))}
       {entities.map(({ x, y, width, height, id, type }) => {
         const style = {
           ...styles[type],
@@ -58,12 +82,16 @@ const Level: React.SFC<Props> = ({
 const mapStateToProps = (state: State) => {
   return {
     entities: state.entities,
-    game: state.game
+    game: state.game,
+    window: state.window,
+    player: state.player
   };
 };
 
 const mapDispatchToProps = {
-  dispatchInitEntities: initEntities
+  dispatchInitEntities: initEntities,
+  dispatchInitPills: (payload: { x: number; y: number; id: string }[]) =>
+    initPills(payload)
 };
 
 export default connect(
