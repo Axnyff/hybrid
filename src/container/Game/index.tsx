@@ -7,10 +7,10 @@ import useHandleGameLoop from "effects/useHandleGameLoop";
 import useHandleKeyBoard from "effects/useHandleKeyboard";
 import useHandlePause from "effects/useHandlePause";
 import useHandleWindowSize from "effects/useHandleWindowSize";
-import React, { useEffect } from "react";
+import React from "react";
 import { connect } from "react-redux";
 import { State, update } from "store";
-import { EntitiesState, Entity } from "store/entities";
+import { PlayerState } from "store/player";
 import { GameState, setGame, togglePause } from "store/game";
 import {
   Direction,
@@ -23,6 +23,7 @@ import levels from "levels";
 
 interface Props {
   game: GameState;
+  player: PlayerState;
   keyboard: KeyboardState;
   dispatchUpdate: () => void;
   dispatchKeyboardUp: (dir: Direction) => void;
@@ -40,12 +41,13 @@ const Game: React.SFC<Props> = props => {
     dispatchUpdate,
     dispatchTogglePause,
     dispatchRestartGame,
-    game
+    game,
+    player,
   } = props;
 
   useHandleKeyBoard({ dispatchKeyboardUp, dispatchKeyboardDown });
   useHandleWindowSize(dispatchSetWindowSize);
-  useHandleGameLoop({ dispatchUpdate, game });
+  useHandleGameLoop({ dispatchUpdate, game, frameRate: player.frameRate });
 
   const toggler = game.lost ? dispatchRestartGame : dispatchTogglePause;
   useHandlePause({ toggler });
@@ -68,7 +70,8 @@ const Game: React.SFC<Props> = props => {
 const mapStateToProps = (state: State) => {
   return {
     keyboard: state.keyboard,
-    game: state.game
+    game: state.game,
+    player: state.player,
   };
 };
 

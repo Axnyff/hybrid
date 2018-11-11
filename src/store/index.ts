@@ -1,4 +1,4 @@
-import { Action, combineReducers, createStore } from "redux";
+import { combineReducers } from "redux";
 import entitiesReducer, { EntitiesState } from "./entities";
 import gameReducer, { GameState } from "./game";
 import keyboardReducer, { KeyboardState } from "./keyboard";

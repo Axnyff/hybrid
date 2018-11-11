@@ -1,18 +1,15 @@
 import { AnyAction } from "redux";
-import { combineEpics, Epic, ofType, StateObservable } from "redux-observable";
-import { interval, Observable, from } from "rxjs";
+import { combineEpics, ofType, StateObservable } from "redux-observable";
+import { Observable, from } from "rxjs";
 import {
   delay,
   filter,
   flatMap,
   map,
   mapTo,
-  withLatestFrom
 } from "rxjs/operators";
 import { State } from "store";
-import { Entity, PlatformEntity, PlayerEntity } from "store/entities";
-import { Direction } from "store/keyboard";
-import { WindowState } from "store/window";
+import { Entity, PlayerEntity } from "store/entities";
 import { updatePlayerEntity, detectWinOrLost } from "./helpers";
 
 const updateGameEpic = (
@@ -59,9 +56,8 @@ const updatePlatformsEpic = (
     ofType("UPDATE_PLATFORMS_ENTITY"),
     flatMap(() => {
       const state = state$.value;
-      const { keyboard, entities, player } = state;
 
-      const actions = entities
+      const actions = state.entities
         .filter(({ type }) => type !== "player")
         .map(entity => {
           if (entity.updateFn) {
@@ -91,7 +87,7 @@ const updatePlayerEpic = (
     ofType("UPDATE_PLAYER_ENTITY"),
     map(() => {
       const state = state$.value;
-      const { keyboard, entities, player } = state;
+      const { entities } = state;
       const playerEntity = entities.find(
         ({ type }) => type === "player"
       ) as PlayerEntity;

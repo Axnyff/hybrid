@@ -82,7 +82,7 @@ export function detectWinOrLost(
   playerEntity: PlayerEntity,
   state: State
 ): [boolean, boolean] {
-  const { entities, window } = state;
+  const { entities } = state;
 
   const touchedTrap =
     entities.find(
@@ -157,7 +157,6 @@ function handlePlayerCollision(
 ): PlayerEntity {
   const { x, y, height, width } = originalEntity;
   const newY = entity.y;
-  const newX = entity.x;
 
   const top = entity.y + entity.height;
   const otherTop = otherEntity.y + otherEntity.height;
@@ -179,8 +178,8 @@ function handlePlayerCollision(
 
     // x overlap
     if (
-      originalEntity.x + width <= otherEntity.x &&
-      entity.x + originalEntity.width >= otherEntity.x
+      x + width <= otherEntity.x &&
+      entity.x + width >= otherEntity.x
     ) {
       return { ...entity, x: otherEntity.x - entity.width, speedX: 0 };
     }
