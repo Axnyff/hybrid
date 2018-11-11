@@ -1,6 +1,6 @@
-import { GameState } from "store/game";
 import { useEffect } from "react";
 import { interval } from "rxjs";
+import { GameState } from "store/game";
 
 interface Args {
   dispatchUpdate: () => void;

@@ -57,7 +57,7 @@ export default (state: EntitiesState = [], action: Action) => {
     case "INIT_ENTITIES":
     return action.payload;
     case "UPDATE_ENTITY":
-    return state.map(entity => {
+    return state.map((entity) => {
       if (entity.id === action.payload.entity.id) {
         return action.payload.entity;
       }

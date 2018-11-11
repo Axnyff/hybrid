@@ -41,6 +41,7 @@ export default (state: KeyboardState =  initialStateKeyboard, action: KeyboardAc
         ...state, [action.payload]: false,
       };
     }
+    break;
   case "KEYBOARD_DOWN":
     if (!state[action.payload]) {
       return {

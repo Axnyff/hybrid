@@ -1,9 +1,9 @@
-import { Action, createStore, combineReducers } from "redux";
-import keyboardReducer, { KeyboardState } from "./keyboard";
-import windowReducer, { WindowState } from "./window";
+import { Action, combineReducers, createStore } from "redux";
 import entitiesReducer, { EntitiesState } from "./entities";
 import gameReducer, { GameState } from "./game";
+import keyboardReducer, { KeyboardState } from "./keyboard";
 import playerReducer, { PlayerState } from "./player";
+import windowReducer, { WindowState } from "./window";
 
 export const updateAction = ({
   type: "UPDATE",

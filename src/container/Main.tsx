@@ -1,11 +1,11 @@
 import React from "react";
-import { createStore, compose, applyMiddleware, AnyAction } from "redux";
+import { AnyAction, applyMiddleware, compose, createStore } from "redux";
 
-import { createEpicMiddleware } from "redux-observable";
 import { Provider } from "react-redux";
-import Game from "./Game";
+import { createEpicMiddleware } from "redux-observable";
 import { reducer, State } from "store/";
 import rootEpic from "store/epics/";
+import Game from "./Game";
 
 declare global {
   interface Window {
@@ -19,7 +19,7 @@ const epicMiddleWare = createEpicMiddleware<AnyAction, AnyAction, State>();
 
 const store = createStore(
   reducer, composeEnhancers(
-    applyMiddleware(epicMiddleWare)
+    applyMiddleware(epicMiddleWare),
   ));
 
 epicMiddleWare.run(rootEpic);

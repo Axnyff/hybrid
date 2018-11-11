@@ -1,12 +1,11 @@
-import { combineEpics, Epic, StateObservable, ofType } from "redux-observable";
-import { Observable } from "rxjs";
 import { AnyAction } from "redux";
+import { combineEpics, Epic, ofType, StateObservable } from "redux-observable";
+import { interval, Observable } from "rxjs";
+import { delay, filter, flatMap, map, mapTo, withLatestFrom } from "rxjs/operators";
 import { State } from "store";
+import { Entity, PlatformEntity, PlayerEntity } from "store/entities";
 import { Direction } from "store/keyboard";
-import { PlayerEntity, PlatformEntity, Entity } from "store/entities";
 import { WindowState } from "store/window";
-import { filter, mapTo, flatMap, map, delay, withLatestFrom } from "rxjs/operators";
-import { interval, from } from "rxjs";
 import { hasOverlap, looseComp, normalize } from "./helpers";
 
 const staticEntities = (window: WindowState): Entity[] => [
@@ -24,7 +23,7 @@ const updateGameEpic = (action$: Observable<AnyAction>, state$: StateObservable<
       payload: {
         won: false,
         level: state$.value.game.level + 1,
-      }}))
+      }})),
   );
 
 const handlePlateFormUpdate = (entity: Entity) => {
@@ -49,22 +48,21 @@ const updatePlayerEpic = (action$: Observable<AnyAction>, state$: StateObservabl
       }
 
       const touchedTrap = entities.find((otherEntity) =>
-        otherEntity.type === "trap" && hasOverlap(otherEntity, playerEntity)
+        otherEntity.type === "trap" && hasOverlap(otherEntity, playerEntity),
       );
 
       const reachedDoor = entities.find((otherEntity) =>
-        otherEntity.type === "door" && hasOverlap(otherEntity, playerEntity)
+        otherEntity.type === "door" && hasOverlap(otherEntity, playerEntity),
       );
-
 
       const platformsTouching = entities.filter((otherEntity) =>
         otherEntity.type === "platform" && hasOverlap(
-          playerEntity, otherEntity, looseComp)
+          playerEntity, otherEntity, looseComp),
       ).length;
 
       const staticTouching = staticEntities(state.window).filter((otherEntity) =>
         hasOverlap(
-          playerEntity, otherEntity, looseComp
+          playerEntity, otherEntity, looseComp,
         )).length;
 
       const crushed = platformsTouching > 1 || platformsTouching >= 1 && staticTouching >= 1;
@@ -103,7 +101,7 @@ const updatePlayerEpic = (action$: Observable<AnyAction>, state$: StateObservabl
           entity: updatePlayerEntity(
             {...playerEntity, speedX, speedY, lastJump },
             state),
-        }
+        },
       };
     }));
 
@@ -112,9 +110,8 @@ const updateEpic = (action$: Observable<AnyAction>, state$: StateObservable<Stat
     ofType("UPDATE"),
     filter(() => state$.value.game.won ===  false),
     mapTo({
-      type: "UPDATE_PLATFORMS_ENTITY"
+      type: "UPDATE_PLATFORMS_ENTITY",
     }));
-
 
 const updatePlatformsEpic = (action$: Observable<AnyAction>, state$: StateObservable<State>) =>
     action$.pipe(
@@ -123,13 +120,13 @@ const updatePlatformsEpic = (action$: Observable<AnyAction>, state$: StateObserv
         const state = state$.value;
         const { keyboard, entities, player } = state;
 
-        const actions = entities.filter(({ type }) =>  type !== "player").map(entity => {
+        const actions = entities.filter(({ type }) =>  type !== "player").map((entity) => {
           if (entity.updateFn) {
             return {
               type: "UPDATE_ENTITY",
               payload: {
                 entity: handlePlateFormUpdate(entity.updateFn(entity)),
-              }
+              },
             };
           }
           return {
@@ -147,7 +144,6 @@ interface Coords {
   a: number;
   b: number;
 }
-
 
 function handlePlayerCollision(entity: Entity, otherEntity: Entity, originalEntity: Entity): Entity {
   const { x, y, height, width } = originalEntity;
@@ -182,14 +178,13 @@ function handlePlayerCollision(entity: Entity, otherEntity: Entity, originalEnti
   return entity;
 }
 
-
 function updatePlayerEntity(entity: Entity, { window, entities }: State) {
   const moved = {
     ...entity, x: entity.x + entity.speedX, y: entity.y + entity.speedY,
   };
 
   const otherEntities = entities.filter(
-    other => other.id !== entity.id && other.type !== "door" && other.type !== "trap"
+    (other) => other.id !== entity.id && other.type !== "door" && other.type !== "trap",
   ).concat(staticEntities(window));
 
   const result = otherEntities

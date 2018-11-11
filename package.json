@@ -53,6 +53,7 @@
     "redux": "^4.0.1",
     "redux-observable": "^1.0.0",
     "resolve": "1.8.1",
+    "rxjs": "^6.3.3",
     "sass-loader": "7.1.0",
     "style-loader": "0.23.0",
     "terser-webpack-plugin": "1.1.0",
@@ -67,8 +68,7 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js",
-    "lint": "tslint --fix 'src/**/*'"
+    "test": "node scripts/test.js"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -124,8 +124,5 @@
     "presets": [
       "react-app"
     ]
-  },
-  "devDependencies": {
-    "tslint": "^5.11.0"
   }
 }

@@ -52,7 +52,7 @@ export default (state: GameState = initialState, action: Action) => {
   if (action.type === "TOGGLE_PAUSE") {
     return {
       ...state,
-      paused: !state.paused
+      paused: !state.paused,
     };
   }
   return state;

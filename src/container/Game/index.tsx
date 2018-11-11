@@ -1,18 +1,18 @@
+import LostOverlay from "components/LostOverlay";
+import PauseOverlay from "components/PauseOverlay";
+import WonOverlay from "components/WonOverlay";
+import Level from "container/Level";
+import useHandleGameLoop from "effects/useHandleGameLoop";
+import useHandleKeyBoard from "effects/useHandleKeyboard";
+import useHandlePause from "effects/useHandlePause";
+import useHandleWindowSize from "effects/useHandleWindowSize";
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { State, update } from "store";
-import { Entity, EntitiesState } from "store/entities";
-import { KeyboardState, keyboardUp, keyboardDown, Direction } from "store/keyboard";
+import { EntitiesState, Entity } from "store/entities";
+import { GameState, setGame, togglePause } from "store/game";
+import { Direction, keyboardDown, KeyboardState, keyboardUp } from "store/keyboard";
 import { setWindowSize } from "store/window";
-import { togglePause, setGame, GameState } from "store/game";
-import useHandleKeyBoard from "effects/useHandleKeyboard";
-import useHandleWindowSize from "effects/useHandleWindowSize";
-import useHandleGameLoop from "effects/useHandleGameLoop";
-import useHandlePause from "effects/useHandlePause";
-import Level from "container/Level";
-import PauseOverlay from "components/PauseOverlay";
-import LostOverlay from "components/LostOverlay";
-import WonOverlay from "components/WonOverlay";
 
 interface Props {
   game: GameState;
@@ -31,7 +31,6 @@ const createPlateform = ({ id, x, y, width, height, updateFn, speedX = 0, speedY
   type: "platform",
   updateFn,
 });
-
 
 const initialEntities: EntitiesState = [
   {
@@ -84,11 +83,11 @@ const initialEntities: EntitiesState = [
       const { x } = entity;
       if (x <= 100) {
         return {
-          ...entity, x: 100, speedX: 5
+          ...entity, x: 100, speedX: 5,
         };
       } else if (x >= 300) {
         return {
-          ...entity, x: 300, speedX: -5
+          ...entity, x: 300, speedX: -5,
         };
       }
       return entity;
@@ -105,11 +104,11 @@ const initialEntities: EntitiesState = [
       const { y } = entity;
       if (y <= 20) {
         return {
-          ...entity, y: 20, speedY: 5
+          ...entity, y: 20, speedY: 5,
         };
       } else if (y >= 200) {
         return {
-          ...entity, y: 200, speedY: -5
+          ...entity, y: 200, speedY: -5,
         };
       }
       return entity;

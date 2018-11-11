@@ -1,9 +1,9 @@
+import useHandleEntitiesCreation from "effects/useHandleEntitiesCreation";
 import React from "react";
 import { connect } from "react-redux";
 import { State } from "store";
-import { initEntities, EntitiesState } from "store/entities";
+import { EntitiesState, initEntities } from "store/entities";
 import { GameState } from "store/game";
-import useHandleEntitiesCreation from "effects/useHandleEntitiesCreation";
 
 interface Props {
   dispatchInitEntities: (entities: EntitiesState) => void;
@@ -34,7 +34,7 @@ const Level: React.SFC<Props> = ({ game, dispatchInitEntities, initialEntities, 
       {entities.map(({ x, y, width, height, id, type }) => {
         const style = {
           ...styles[type],
-          left: x, bottom: y, width, height
+          left: x, bottom: y, width, height,
         };
         return (
           <div
