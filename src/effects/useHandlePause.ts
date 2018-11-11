@@ -1,8 +1,8 @@
-import { useEffect } from 'react';
+import { useEffect } from "react";
 
-type Input = {
+interface Input {
   toggler: () => void;
-};
+}
 
 export default ({ toggler }: Input) => {
   useEffect(() => {
@@ -15,18 +15,18 @@ export default ({ toggler }: Input) => {
     };
 
     const handleKeyUp = (event: KeyboardEvent) => {
-      if (event.keyCode === 32 ) {
+      if (event.keyCode === 32) {
         blocked = false;
       }
 
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    window.addEventListener('keyup', handleKeyUp);
+    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("keyup", handleKeyUp);
 
     return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      window.removeEventListener('keyup', handleKeyUp);
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keyup", handleKeyUp);
     };
   }, [toggler]);
 };

@@ -1,7 +1,7 @@
 import * as React from "react";
 
 declare module "react" {
-  function useState<T>(initialState: T | (() => T)): [T, (newState: T | ((arg: T) => T) ) => void];
+  function useState<T>(initialState: T | (() => T)): [T, (newState: T | ((arg: T) => T)) => void];
   function useEffect(
     create: () => void | (() => void),
     inputs?: ReadonlyArray<unknown>

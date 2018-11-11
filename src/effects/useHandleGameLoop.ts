@@ -1,13 +1,13 @@
-import { GameState } from 'store/game';
-import { useEffect } from 'react';
-import { interval } from 'rxjs';
+import { GameState } from "store/game";
+import { useEffect } from "react";
+import { interval } from "rxjs";
 
 interface Args {
   dispatchUpdate: () => void;
   game: GameState;
-};
+}
 
-export default ({ dispatchUpdate, game} : Args) => {
+export default ({ dispatchUpdate, game}: Args) => {
   useEffect(() => {
     if (!game.paused && !game.lost && !game.won) {
       const interval = window.setInterval(() => {

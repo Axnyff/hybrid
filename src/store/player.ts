@@ -1,12 +1,12 @@
-export type PlayerState = {
+export interface PlayerState {
   gravity: number;
   accelerationX: number;
   slowDownX: number;
   accelerationY: number;
   maxSpeed: number;
-  maxJump: number,
-  jumpDelay: number,
-};
+  maxJump: number;
+  jumpDelay: number;
+}
 
 const initialState = {
   gravity: 2,
@@ -18,6 +18,6 @@ const initialState = {
   jumpDelay: 0,
 };
 
-export default(state : PlayerState = initialState, action: any) : PlayerState => {
+export default(state: PlayerState = initialState, action: any): PlayerState => {
   return state;
 };
