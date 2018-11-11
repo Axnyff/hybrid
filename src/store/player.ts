@@ -6,6 +6,8 @@ export interface PlayerState {
   maxSpeed: number;
   maxJump: number;
   jumpDelay: number;
+  maxSpeedX: number;
+  jumpSpeed: number;
 }
 
 const initialState = {
@@ -15,9 +17,14 @@ const initialState = {
   slowDownX: 2,
   maxSpeed: 10,
   maxJump: 2,
-  jumpDelay: 0,
+  jumpDelay: 200,
+  maxSpeedX: 10,
+  jumpSpeed: 25
 };
 
-export default(state: PlayerState = initialState, action: any): PlayerState => {
+export default (
+  state: PlayerState = initialState,
+  action: any
+): PlayerState => {
   return state;
 };

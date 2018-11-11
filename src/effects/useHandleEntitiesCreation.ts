@@ -9,9 +9,12 @@ interface Args {
 }
 
 export default ({ dispatchInitEntities, entities, game }: Args) => {
-  useEffect(() => {
-    if (!game.lost) {
-      dispatchInitEntities(entities);
-    }
-  }, [entities, game.lost]);
+  useEffect(
+    () => {
+      if (!game.lost) {
+        dispatchInitEntities(entities);
+      }
+    },
+    [entities, game.lost]
+  );
 };

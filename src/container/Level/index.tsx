@@ -14,34 +14,42 @@ interface Props {
 
 const styles = {
   player: {
-    background: "red", borderRadius: "100%",
+    background: "red",
+    borderRadius: "100%"
   },
   platform: {
-    background: "blue",
+    background: "blue"
   },
   door: {
-    background: "green",
+    background: "green"
   },
   trap: {
-    background: "black",
-  },
+    background: "black"
+  }
 };
 
-const Level: React.SFC<Props> = ({ game, dispatchInitEntities, initialEntities, entities }) => {
-  useHandleEntitiesCreation({ game, dispatchInitEntities, entities: initialEntities });
+const Level: React.SFC<Props> = ({
+  game,
+  dispatchInitEntities,
+  initialEntities,
+  entities
+}) => {
+  useHandleEntitiesCreation({
+    game,
+    dispatchInitEntities,
+    entities: initialEntities
+  });
   return (
     <div>
       {entities.map(({ x, y, width, height, id, type }) => {
         const style = {
           ...styles[type],
-          left: x, bottom: y, width, height,
+          left: x,
+          bottom: y,
+          width,
+          height
         };
-        return (
-          <div
-            key={id}
-            style={{...style, position: "absolute"}}
-          />
-        );
+        return <div key={id} style={{ ...style, position: "absolute" }} />;
       })}
     </div>
   );
@@ -50,12 +58,15 @@ const Level: React.SFC<Props> = ({ game, dispatchInitEntities, initialEntities, 
 const mapStateToProps = (state: State) => {
   return {
     entities: state.entities,
-    game: state.game,
+    game: state.game
   };
 };
 
 const mapDispatchToProps = {
-  dispatchInitEntities: initEntities,
+  dispatchInitEntities: initEntities
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Level);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Level);

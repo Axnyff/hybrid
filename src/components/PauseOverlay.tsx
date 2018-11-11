@@ -12,7 +12,7 @@ const style = {
   justifyContent: "center",
   alignItems: "center",
   fontSize: "30px",
-  color: "white",
+  color: "white"
 };
 
 export default () => (

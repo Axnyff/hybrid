@@ -12,7 +12,8 @@ export interface SetGameAction {
 }
 
 export const setGame = (payload: Partial<GameState>) => ({
-  payload, type: "SET_GAME",
+  payload,
+  type: "SET_GAME"
 });
 
 interface TogglePauseAction {
@@ -20,7 +21,7 @@ interface TogglePauseAction {
 }
 
 export const togglePause = () => ({
-  type: "TOGGLE_PAUSE",
+  type: "TOGGLE_PAUSE"
 });
 
 export interface GameState {
@@ -34,25 +35,29 @@ const initialState = {
   level: 1,
   paused: false,
   lost: false,
-  won: false,
+  won: false
 };
 
-type Action = SetGameAction | TogglePauseAction | WinGameAction | LoseGameAction;
+type Action =
+  | SetGameAction
+  | TogglePauseAction
+  | WinGameAction
+  | LoseGameAction;
 
 export default (state: GameState = initialState, action: Action) => {
   if (action.type === "SET_GAME") {
-    return {...state, ...action.payload};
+    return { ...state, ...action.payload };
   }
   if (action.type === "WIN_GAME") {
-    return {...state, won: true};
+    return { ...state, won: true };
   }
   if (action.type === "LOSE_GAME") {
-    return {...state, lost: true};
+    return { ...state, lost: true };
   }
   if (action.type === "TOGGLE_PAUSE") {
     return {
       ...state,
-      paused: !state.paused,
+      paused: !state.paused
     };
   }
   return state;

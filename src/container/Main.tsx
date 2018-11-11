@@ -18,9 +18,9 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const epicMiddleWare = createEpicMiddleware<AnyAction, AnyAction, State>();
 
 const store = createStore(
-  reducer, composeEnhancers(
-    applyMiddleware(epicMiddleWare),
-  ));
+  reducer,
+  composeEnhancers(applyMiddleware(epicMiddleWare))
+);
 
 epicMiddleWare.run(rootEpic);
 

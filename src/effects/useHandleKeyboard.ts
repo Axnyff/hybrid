@@ -6,11 +6,11 @@ interface Input {
   dispatchKeyboardDown: (dir: Direction) => void;
 }
 
-const keyCodeMap: {[K: number]: Direction } = {
+const keyCodeMap: { [K: number]: Direction } = {
   37: "left",
   38: "up",
   39: "right",
-  40: "down",
+  40: "down"
 };
 
 export default ({ dispatchKeyboardUp, dispatchKeyboardDown }: Input) => {

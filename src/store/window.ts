@@ -1,10 +1,11 @@
 interface SetWindowSizeAction {
   type: "SET_WINDOW_SIZE";
-  payload: {width: number, height: number };
+  payload: { width: number; height: number };
 }
 
 export const setWindowSize = (payload: WindowState) => ({
-  payload, type: "SET_WINDOW_SIZE",
+  payload,
+  type: "SET_WINDOW_SIZE"
 });
 
 export interface WindowState {
@@ -14,10 +15,13 @@ export interface WindowState {
 
 const initialState = {
   width: window.innerWidth,
-  height: window.innerHeight,
+  height: window.innerHeight
 };
 
-export default (state: WindowState = initialState, action: SetWindowSizeAction) => {
+export default (
+  state: WindowState = initialState,
+  action: SetWindowSizeAction
+) => {
   if (action.type === "SET_WINDOW_SIZE") {
     return action.payload;
   }

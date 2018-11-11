@@ -5,9 +5,9 @@ import keyboardReducer, { KeyboardState } from "./keyboard";
 import playerReducer, { PlayerState } from "./player";
 import windowReducer, { WindowState } from "./window";
 
-export const updateAction = ({
-  type: "UPDATE",
-});
+export const updateAction = {
+  type: "UPDATE"
+};
 
 export const update = () => updateAction;
 
@@ -24,5 +24,5 @@ export const reducer = combineReducers({
   window: windowReducer,
   entities: entitiesReducer,
   game: gameReducer,
-  player: playerReducer,
+  player: playerReducer
 });

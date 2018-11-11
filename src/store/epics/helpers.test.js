@@ -1,4 +1,10 @@
-import { looseComp, strictComp, hasOverlap, normalize, detectWinOrLost } from "./helpers";
+import {
+  looseComp,
+  strictComp,
+  hasOverlap,
+  normalize,
+  detectWinOrLost
+} from "./helpers";
 
 describe("looseComp", () => {
   it("should work", () => {
@@ -21,14 +27,14 @@ describe("hasOverlap", () => {
       x: 20,
       width: 20,
       y: 20,
-      height: 20,
+      height: 20
     };
 
     const entityB = {
       x: 30,
       width: 20,
       y: 30,
-      height: 20,
+      height: 20
     };
 
     expect(hasOverlap(entityA, entityB)).toBe(true);
@@ -38,14 +44,14 @@ describe("hasOverlap", () => {
       x: 40,
       width: 20,
       y: 40,
-      height: 20,
+      height: 20
     };
 
     const entityB = {
       x: 20,
       width: 20,
       y: 20,
-      height: 20,
+      height: 20
     };
     expect(hasOverlap(entityA, entityB)).toBe(false);
   });
@@ -63,54 +69,65 @@ describe("normalize", () => {
   });
 });
 
-describe('detectWinOrLost', () => {
+describe("detectWinOrLost", () => {
   const playerEntity = {
     x: 20,
     y: 0,
     width: 20,
-    height: 20,
+    height: 20
   };
-  it('should detect a lost if a trap is touching', () => {
+  it("should detect a lost if a trap is touching", () => {
     const state = {
       window: {
         width: 1000,
-        height: 1000,
+        height: 1000
       },
-      entities: [{
-        type: 'trap',
-        x: 20, y: 0,
-        width: 1, height: 1,
-      }]
+      entities: [
+        {
+          type: "trap",
+          x: 20,
+          y: 0,
+          width: 1,
+          height: 1
+        }
+      ]
     };
     expect(detectWinOrLost(playerEntity, state)[1]).toBe(true);
   });
-  it('should detect a win if a door is touching', () => {
+  it("should detect a win if a door is touching", () => {
     const state = {
       window: {
         width: 1000,
-        height: 1000,
+        height: 1000
       },
-      entities: [{
-        type: 'door',
-        x: 20, y: 0,
-        width: 1, height: 1,
-      }]
+      entities: [
+        {
+          type: "door",
+          x: 20,
+          y: 0,
+          width: 1,
+          height: 1
+        }
+      ]
     };
     expect(detectWinOrLost(playerEntity, state)[0]).toBe(true);
   });
-  it('should detect a lost if the player is crushed', () => {
+  it("should detect a lost if the player is crushed", () => {
     const state = {
       window: {
         width: 1000,
-        height: 1000,
+        height: 1000
       },
-      entities: [{
-        type: 'platform',
-        x: 20, y: 15,
-        width: 1, height: 5,
-      }]
+      entities: [
+        {
+          type: "platform",
+          x: 20,
+          y: 15,
+          width: 1,
+          height: 5
+        }
+      ]
     };
     expect(detectWinOrLost(playerEntity, state)[1]).toBe(true);
   });
 });
-

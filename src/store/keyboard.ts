@@ -7,7 +7,7 @@ export interface KeyboardUpAction {
 
 export const keyboardUp = (dir: Direction) => ({
   type: "KEYBOARD_UP",
-  payload: dir,
+  payload: dir
 });
 
 export interface KeyboardDownAction {
@@ -17,12 +17,10 @@ export interface KeyboardDownAction {
 
 export const keyboardDown = (dir: Direction) => ({
   type: "KEYBOARD_DOWN",
-  payload: dir,
+  payload: dir
 });
 
-export type KeyboardState = {
-  [d in Direction]: boolean;
-};
+export type KeyboardState = { [d in Direction]: boolean };
 
 export type KeyboardAction = KeyboardUpAction | KeyboardDownAction;
 
@@ -30,24 +28,29 @@ const initialStateKeyboard = {
   left: false,
   up: false,
   right: false,
-  down: false,
+  down: false
 };
 
-export default (state: KeyboardState =  initialStateKeyboard, action: KeyboardAction) => {
+export default (
+  state: KeyboardState = initialStateKeyboard,
+  action: KeyboardAction
+) => {
   switch (action.type) {
-  case "KEYBOARD_UP":
-    if (state[action.payload]) {
-      return {
-        ...state, [action.payload]: false,
-      };
-    }
-    break;
-  case "KEYBOARD_DOWN":
-    if (!state[action.payload]) {
-      return {
-        ...state, [action.payload]: true,
-      };
-    }
+    case "KEYBOARD_UP":
+      if (state[action.payload]) {
+        return {
+          ...state,
+          [action.payload]: false
+        };
+      }
+      break;
+    case "KEYBOARD_DOWN":
+      if (!state[action.payload]) {
+        return {
+          ...state,
+          [action.payload]: true
+        };
+      }
   }
   return state;
 };

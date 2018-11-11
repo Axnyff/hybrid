@@ -15,10 +15,4 @@ const style = {
   color: "white"
 };
 
-export default () => (
-  <div style={style}>
-    <div style={{ background: "black", padding: "20px" }}>
-      You lost! Press space to restart
-    </div>
-  </div>
-);
+export default () => <div style={style}>Game won!!!</div>;

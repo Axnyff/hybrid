@@ -22,11 +22,11 @@ export type PlatformEntity = BaseEntity & {
 };
 
 export type DoorEntity = BaseEntity & {
-  type: "door",
+  type: "door";
 };
 
 export type TrapEntity = BaseEntity & {
-  type: "trap",
+  type: "trap";
 };
 
 export type Entity = PlayerEntity | PlatformEntity | DoorEntity | TrapEntity;
@@ -36,7 +36,7 @@ export type EntitiesState = Entity[];
 export interface UpdateEntityAction {
   type: "UPDATE_ENTITY";
   payload: {
-    entity: Entity,
+    entity: Entity;
   };
 }
 
@@ -47,7 +47,7 @@ export interface InitEntitiesAction {
 
 export const initEntities = (entities: EntitiesState) => ({
   type: "INIT_ENTITIES",
-  payload: entities,
+  payload: entities
 });
 
 type Action = UpdateEntityAction | InitEntitiesAction;
@@ -55,14 +55,14 @@ type Action = UpdateEntityAction | InitEntitiesAction;
 export default (state: EntitiesState = [], action: Action) => {
   switch (action.type) {
     case "INIT_ENTITIES":
-    return action.payload;
+      return action.payload;
     case "UPDATE_ENTITY":
-    return state.map((entity) => {
-      if (entity.id === action.payload.entity.id) {
-        return action.payload.entity;
-      }
-      return entity;
-    });
+      return state.map(entity => {
+        if (entity.id === action.payload.entity.id) {
+          return action.payload.entity;
+        }
+        return entity;
+      });
   }
   return state;
 };
