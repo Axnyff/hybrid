@@ -1,4 +1,4 @@
-import { looseComp, strictComp, hasOverlap, normalize } from "./helpers";
+import { looseComp, strictComp, hasOverlap, normalize, detectWinOrLost } from "./helpers";
 
 describe("looseComp", () => {
   it("should work", () => {
@@ -62,3 +62,55 @@ describe("normalize", () => {
     expect(normalize(-4, 30, [-20, 200])).toBe(-4);
   });
 });
+
+describe('detectWinOrLost', () => {
+  const playerEntity = {
+    x: 20,
+    y: 0,
+    width: 20,
+    height: 20,
+  };
+  it('should detect a lost if a trap is touching', () => {
+    const state = {
+      window: {
+        width: 1000,
+        height: 1000,
+      },
+      entities: [{
+        type: 'trap',
+        x: 20, y: 0,
+        width: 1, height: 1,
+      }]
+    };
+    expect(detectWinOrLost(playerEntity, state)[1]).toBe(true);
+  });
+  it('should detect a win if a door is touching', () => {
+    const state = {
+      window: {
+        width: 1000,
+        height: 1000,
+      },
+      entities: [{
+        type: 'door',
+        x: 20, y: 0,
+        width: 1, height: 1,
+      }]
+    };
+    expect(detectWinOrLost(playerEntity, state)[0]).toBe(true);
+  });
+  it('should detect a lost if the player is crushed', () => {
+    const state = {
+      window: {
+        width: 1000,
+        height: 1000,
+      },
+      entities: [{
+        type: 'platform',
+        x: 20, y: 15,
+        width: 1, height: 5,
+      }]
+    };
+    expect(detectWinOrLost(playerEntity, state)[1]).toBe(true);
+  });
+});
+
