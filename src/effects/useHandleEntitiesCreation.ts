@@ -5,10 +5,17 @@ import { WindowState } from "store/window";
 import { allPills } from "store/pills";
 import { hasOverlap } from "store/epics/helpers";
 
+export type PillPayload = {
+  x: number;
+  y: number;
+  type: string;
+  id: number;
+}[];
+
 interface Args {
   entities: EntitiesState;
   dispatchInitEntities: (entities: EntitiesState) => void;
-  dispatchInitPills: (payload: { x: number; y: number; id: string }[]) => void;
+  dispatchInitPills: (payload: PillPayload) => void;
   game: GameState;
   window: WindowState;
 }
@@ -18,8 +25,8 @@ const randBounded = (min: number, max: number) =>
 
 const randPill = (window: WindowState) => {
   return {
-    x: randBounded(0, window.width),
-    y: randBounded(0, window.height),
+    x: randBounded(0, window.width - 15),
+    y: randBounded(0, window.height - 15),
     width: 15,
     height: 15
   } as Entity;
@@ -34,6 +41,23 @@ const findCoords = (window: WindowState, entities: EntitiesState) => {
   return pill;
 };
 
+let pillsCount = 0;
+const genPills = (
+  count: number,
+  window: WindowState,
+  entities: EntitiesState
+): PillPayload =>
+  Array.from({ length: count }).map(() => {
+    const { x, y } = findCoords(window, entities);
+    const pillIndex = randBounded(0, allPills.length);
+    return {
+      x,
+      y,
+      type: allPills[pillIndex],
+      id: pillsCount++
+    };
+  });
+
 export default ({
   dispatchInitEntities,
   entities,
@@ -45,15 +69,7 @@ export default ({
     () => {
       if (!game.lost) {
         dispatchInitEntities(entities);
-        const { x, y } = findCoords(window, entities);
-        const pillIndex = randBounded(0, allPills.length);
-        dispatchInitPills([
-          {
-            x,
-            y,
-            id: allPills[pillIndex]
-          }
-        ]);
+        dispatchInitPills(genPills(3, window, entities));
       }
     },
     [entities, game.lost]

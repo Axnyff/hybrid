@@ -4,23 +4,29 @@ import { LoseGameAction } from "./game";
 type InitPillsAction = {
   type: "INIT_PILLS";
   payload: {
-    id: string;
+    type: string;
+    id: number;
     x: number;
     y: number;
   }[];
 };
 
-export const initPills = (payload: { id: string; x: number; y: number }[]) => ({
+export const initPills = (
+  payload: { id: number; type: string; x: number; y: number }[]
+) => ({
   type: "INIT_PILLS",
   payload
 });
 
 type EatPillAction = {
   type: "EAT_PILL";
-  payload: string;
+  payload: {
+    id: number;
+    type: string;
+  };
 };
 
-export const eatPill = (payload: string) => ({
+export const eatPill = (payload: { id: number; type: string }) => ({
   type: "EAT_PILL",
   payload
 });
@@ -37,7 +43,8 @@ export interface PlayerState {
   jumpSpeed: number;
   frameRate: number;
   pills: {
-    id: string;
+    id: number;
+    type: string;
     x: number;
     y: number;
   }[];
@@ -76,12 +83,12 @@ export default (
         pills: action.payload
       };
     case "EAT_PILL":
-      pill = pillsType[action.payload];
+      pill = pillsType[action.payload.type];
       if (pill) {
         return {
           ...pill(state),
-          pills: state.pills.filter(({ id }) => id !== action.payload),
-          eatenPills: [...state.eatenPills, action.payload]
+          pills: state.pills.filter(({ id }) => id !== action.payload.id),
+          eatenPills: [...state.eatenPills, action.payload.type]
         };
       }
   }

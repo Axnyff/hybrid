@@ -2,9 +2,17 @@ export interface WinGameAction {
   type: "WIN_GAME";
 }
 
+export const winGame = (): WinGameAction => ({
+  type: "WIN_GAME"
+});
+
 export interface LoseGameAction {
   type: "LOSE_GAME";
 }
+
+export const loseGame = (): LoseGameAction => ({
+  type: "LOSE_GAME"
+});
 
 export interface SetGameAction {
   type: "SET_GAME";

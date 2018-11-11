@@ -239,16 +239,17 @@ export function updatePlayerEntity(entity: PlayerEntity, state: State) {
 export function detectPill(
   entity: PlayerEntity,
   state: State
-): string | undefined {
+): { x: number; y: number; id: number; type: string } | undefined {
   const pill = state.player.pills.find(pill => {
     return hasOverlap(
       {
-        ...pill,
+        x: pill.x,
+        y: pill.y,
         width: 15,
         height: 15
       } as Entity,
       entity
     );
   });
-  return pill && pill.id;
+  return pill;
 }

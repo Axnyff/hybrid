@@ -4,6 +4,8 @@ import { Observable, from } from "rxjs";
 import { delay, filter, flatMap, map, mapTo } from "rxjs/operators";
 import { State } from "store";
 import { Entity, PlayerEntity } from "store/entities";
+import { eatPill } from "store/player";
+import { winGame, loseGame } from "store/game";
 import { updatePlayerEntity, detectWinOrLost, detectPill } from "./helpers";
 
 const updateGameEpic = (
@@ -89,17 +91,17 @@ const updatePlayerEpic = (
       const [won, lost] = detectWinOrLost(playerEntity, state);
 
       if (lost) {
-        return { type: "LOSE_GAME" };
+        return loseGame();
       }
 
       if (won) {
-        return { type: "WIN_GAME" };
+        return winGame();
       }
 
       const foundPill = detectPill(playerEntity, state);
 
       if (foundPill) {
-        return { type: "EAT_PILL", payload: foundPill };
+        return eatPill(foundPill);
       }
 
       return {

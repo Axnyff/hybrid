@@ -1,4 +1,6 @@
-import useHandleEntitiesCreation from "effects/useHandleEntitiesCreation";
+import useHandleEntitiesCreation, {
+  PillPayload
+} from "effects/useHandleEntitiesCreation";
 import React from "react";
 import { connect } from "react-redux";
 import { State } from "store";
@@ -12,7 +14,7 @@ interface Props {
   initialEntities: EntitiesState;
   entities: EntitiesState;
   game: GameState;
-  dispatchInitPills: (payload: { x: number; y: number; id: string }[]) => void;
+  dispatchInitPills: (payload: PillPayload) => void;
   window: WindowState;
   player: PlayerState;
 }
@@ -90,8 +92,7 @@ const mapStateToProps = (state: State) => {
 
 const mapDispatchToProps = {
   dispatchInitEntities: initEntities,
-  dispatchInitPills: (payload: { x: number; y: number; id: string }[]) =>
-    initPills(payload)
+  dispatchInitPills: (payload: PillPayload) => initPills(payload)
 };
 
 export default connect(
