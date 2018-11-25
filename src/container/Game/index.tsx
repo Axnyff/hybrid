@@ -65,7 +65,7 @@ const Game: React.SFC<Props> = props => {
       {game.lost ? <LostOverlay /> : null}
       {game.won ? <WonOverlay /> : null}
       <Hub level={game.level} eatenPills={player.eatenPills} />
-      <Level key={game.level} initialEntities={levels[1].entities} />
+      <Level key={game.level} pillCount={levels[game.level].pillCount} initialEntities={levels[game.level].entities} />
     </div>
   );
 };
@@ -84,7 +84,7 @@ const mapDispatchToProps = {
   dispatchKeyboardDown: keyboardDown,
   dispatchSetWindowSize: setWindowSize,
   dispatchTogglePause: togglePause,
-  dispatchRestartGame: () => setGame({ lost: false, level: 1 })
+  dispatchRestartGame: () => setGame({ lost: false })
 };
 
 export default connect(

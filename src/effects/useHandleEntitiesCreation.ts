@@ -17,6 +17,7 @@ interface Args {
   dispatchInitEntities: (entities: EntitiesState) => void;
   dispatchInitPills: (payload: PillPayload) => void;
   game: GameState;
+  pillCount: number;
   window: WindowState;
 }
 
@@ -25,7 +26,7 @@ const randBounded = (min: number, max: number) =>
 
 const randPill = (window: WindowState) => {
   return {
-    x: randBounded(0, window.width - 15),
+    x: randBounded(0, Math.min(window.width, 1000) - 15),
     y: randBounded(0, window.height - 15),
     width: 15,
     height: 15
@@ -61,6 +62,7 @@ const genPills = (
 export default ({
   dispatchInitEntities,
   entities,
+  pillCount,
   game,
   window,
   dispatchInitPills
@@ -69,7 +71,7 @@ export default ({
     () => {
       if (!game.lost) {
         dispatchInitEntities(entities);
-        dispatchInitPills(genPills(3, window, entities));
+        dispatchInitPills(genPills(pillCount, window, entities));
       }
     },
     [entities, game.lost]

@@ -13,6 +13,7 @@ interface Props {
   dispatchInitEntities: (entities: EntitiesState) => void;
   initialEntities: EntitiesState;
   entities: EntitiesState;
+  pillCount: number;
   game: GameState;
   dispatchInitPills: (payload: PillPayload) => void;
   window: WindowState;
@@ -41,10 +42,12 @@ const Level: React.SFC<Props> = ({
   dispatchInitPills,
   initialEntities,
   entities,
+  pillCount,
   window,
   player
 }) => {
   useHandleEntitiesCreation({
+    pillCount,
     game,
     dispatchInitEntities,
     entities: initialEntities,

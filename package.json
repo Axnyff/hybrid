@@ -1,6 +1,6 @@
 {
   "name": "hybrid",
-  "homepage": "/hybrid",
+  "homepage": ".",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

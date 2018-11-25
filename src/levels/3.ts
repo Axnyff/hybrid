@@ -12,7 +12,13 @@ const entities = [
       x: 300,
       y: 100,
       width: 100,
-      updateFn: boundedXUpdate(3, [300, 800])
+      updateFn: boundedXUpdate(5, [300, 900])
+    },
+    {
+      x: 300,
+      y: 300,
+      width: 100,
+      updateFn: boundedXUpdate(5, [300, 900])
     },
   ]),
   ...genDoors([
@@ -27,7 +33,7 @@ const entities = [
   ]),
 ];
 
-const pillCount = 0;
+const pillCount = 1;
 
 export default {
   entities,
