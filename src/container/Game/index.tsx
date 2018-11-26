@@ -13,7 +13,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { State, update } from "store";
 import { PlayerState } from "store/player";
-import { GameState, setGame, togglePause } from "store/game";
+import { GameState, restartGame, setGame, togglePause } from "store/game";
 import {
   Direction,
   keyboardDown,
@@ -33,6 +33,7 @@ interface Props {
   dispatchSetWindowSize: (payload: { width: number; height: number }) => void;
   dispatchTogglePause: () => void;
   dispatchRestartGame: () => void;
+  dispatchRestartGameFromScratch: () => void;
 }
 
 const Game: React.SFC<Props> = props => {
@@ -43,6 +44,7 @@ const Game: React.SFC<Props> = props => {
     dispatchUpdate,
     dispatchTogglePause,
     dispatchRestartGame,
+    dispatchRestartGameFromScratch,
     game,
     player
   } = props;
@@ -52,10 +54,16 @@ const Game: React.SFC<Props> = props => {
   useHandleWindowSize(dispatchSetWindowSize);
   useHandleGameLoop({ dispatchUpdate, game, frameRate: player.frameRate });
 
-  const toggler = game.lost ? dispatchRestartGame : dispatchTogglePause;
+  let toggler = game.lost ? dispatchRestartGame : dispatchTogglePause;
+
+  const gameWon = !levels[game.level];
+
+  if (gameWon) {
+    toggler = dispatchRestartGameFromScratch;
+  }
   useHandlePause({ toggler });
 
-  if (!levels[game.level]) {
+  if (gameWon) {
     return <GameWonOverlay />;
   }
 
@@ -84,7 +92,8 @@ const mapDispatchToProps = {
   dispatchKeyboardDown: keyboardDown,
   dispatchSetWindowSize: setWindowSize,
   dispatchTogglePause: togglePause,
-  dispatchRestartGame: () => setGame({ lost: false })
+  dispatchRestartGame: () => setGame({ lost: false }),
+  dispatchRestartGameFromScratch: () => restartGame(),
 };
 
 export default connect(

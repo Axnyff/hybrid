@@ -2,8 +2,16 @@ export interface WinGameAction {
   type: "WIN_GAME";
 }
 
+export interface RestartGameAction {
+  type: "RESTART_GAME";
+}
+
 export const winGame = (): WinGameAction => ({
   type: "WIN_GAME"
+});
+
+export const restartGame = (): RestartGameAction => ({
+  type: "RESTART_GAME"
 });
 
 export interface LoseGameAction {
@@ -40,7 +48,7 @@ export interface GameState {
 }
 
 const initialState = {
-  level: 1,
+  level: 10,
   paused: true,
   lost: false,
   won: false
@@ -50,7 +58,8 @@ type Action =
   | SetGameAction
   | TogglePauseAction
   | WinGameAction
-  | LoseGameAction;
+  | LoseGameAction
+  | RestartGameAction;
 
 export default (state: GameState = initialState, action: Action) => {
   if (action.type === "SET_GAME") {
@@ -58,6 +67,9 @@ export default (state: GameState = initialState, action: Action) => {
   }
   if (action.type === "WIN_GAME") {
     return { ...state, won: true };
+  }
+  if (action.type === "RESTART_GAME") {
+    return initialState;
   }
   if (action.type === "LOSE_GAME") {
     return { ...state, lost: true };

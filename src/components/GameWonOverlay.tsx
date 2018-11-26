@@ -15,4 +15,6 @@ const style = {
   color: "white"
 };
 
-export default () => <div style={style}>Game won!!!</div>;
+export default () => <div style={style}>
+  Game won!!! Press space to restart
+</div>;

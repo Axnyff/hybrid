@@ -7,6 +7,7 @@ import { Entity, PlayerEntity } from "store/entities";
 import { eatPill } from "store/player";
 import { winGame, loseGame } from "store/game";
 import { updatePlayerEntity, detectWinOrLost, detectPill } from "./helpers";
+import levels from '../../levels';
 
 const updateGameEpic = (
   action$: Observable<AnyAction>,
@@ -15,6 +16,7 @@ const updateGameEpic = (
   action$.pipe(
     ofType("WIN_GAME"),
     delay(200),
+    filter(() => state$.value.game.level <= Object.keys(levels).length),
     map(() => ({
       type: "SET_GAME",
       payload: {

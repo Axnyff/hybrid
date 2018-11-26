@@ -1,5 +1,5 @@
 import pillsType from "./pills";
-import { LoseGameAction } from "./game";
+import { LoseGameAction, RestartGameAction } from "./game";
 
 type InitPillsAction = {
   type: "INIT_PILLS";
@@ -67,7 +67,7 @@ const initialState = {
   eatenPills: []
 };
 
-type Action = InitPillsAction | EatPillAction | LoseGameAction;
+type Action = InitPillsAction | EatPillAction | LoseGameAction | RestartGameAction;
 
 export default (
   state: PlayerState = initialState,
@@ -76,6 +76,8 @@ export default (
   let pill;
   switch (action.type) {
     case "LOSE_GAME":
+      return initialState;
+    case "RESTART_GAME":
       return initialState;
     case "INIT_PILLS":
       return {

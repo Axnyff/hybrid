@@ -96,18 +96,18 @@ export function detectWinOrLost(
         otherEntity.type === "door" && hasOverlap(otherEntity, playerEntity)
     ) !== undefined;
 
-  const platformsTouching = entities.filter(
-    otherEntity =>
-      otherEntity.type === "platform" &&
-      hasOverlap(playerEntity, otherEntity, looseComp)
-  ).length;
+  const allPlateforms = entities.filter(({ type }) => type === 'platform').
+    concat(staticEntities(state.window));
 
-  const staticTouching = staticEntities(state.window).filter(otherEntity =>
-    hasOverlap(playerEntity, otherEntity, looseComp)
-  ).length;
+  const looseTouching = allPlateforms.filter(otherEntity =>
+    hasOverlap(playerEntity, otherEntity, looseComp));
+
+  const strictTouching = looseTouching.filter(otherEntity =>
+    hasOverlap(playerEntity, otherEntity)
+  );
 
   const crushed =
-    platformsTouching > 1 || (platformsTouching >= 1 && staticTouching >= 1);
+    strictTouching.length > 1 || (strictTouching.length >= 1 && looseTouching.length > 1);
 
   return [reachedDoor, crushed || touchedTrap];
 }
